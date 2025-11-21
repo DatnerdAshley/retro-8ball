@@ -1,45 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Pixel Magic 8 Ball</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
   body {
-    background: #1a001a;
+    background: #0b0040; /* dark navy purple like image bg */
     color: #fff;
     font-family: 'Press Start 2P', monospace;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
+    justify-content: flex-start;
+    min-height: 100vh;
     margin: 0;
+    padding-bottom: 120px;
+    position: relative;
   }
 
   h1 {
-    margin-bottom: 20px;
+    margin: 20px 0;
     font-size: 24px;
-    text-align: center;
-    color: #d1a0ff;
+    color: #cfa0ff;
     text-shadow: 2px 2px 0 #000;
+    text-align: center;
   }
 
+  /* Pixelated 8 Ball Container */
   .ball {
-    width: 200px;
-    height: 200px;
-    background: linear-gradient(145deg, #330033, #660066);
-    border: 5px solid #d1a0ff;
+    position: relative;
+    width: 192px;
+    height: 192px;
+    background: #1e103a; /* base dark purple */
+    box-shadow:
+      4px 4px 0 #2a1a56,
+      8px 8px 0 #3b2b73,
+      inset 10px 10px 0 #4c3c91,
+      inset -10px -10px 0 #1a0a2e;
+    /* Removed border for no boxy outline */
+    image-rendering: pixelated;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 22px;
+    cursor: default;
+  }
+
+  /* Pixel shading "pixels" to simulate the shape (using box shadows for pixel effect) */
+  .ball::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 160px;
+    height: 160px;
+    background: #2a2255; /* dark blue circle */
     border-radius: 50%;
+    box-shadow:
+      inset 10px 10px 0 #524b88,
+      inset -10px -10px 0 #1b1633,
+      4px 4px 0 #453d7d,
+      8px 8px 0 #362f68;
+  }
+
+  /* White circle behind the 8 */
+  .ball .white-circle {
+    position: absolute;
+    top: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 64px;
+    height: 64px;
+    background: #d4f1ff;
+    border: 4px solid #3b6bbf;
+    box-shadow:
+      1px 1px 0 #7aa3ff,
+      -1px -1px 0 #5381d9;
+    border-radius: 50%;
+    image-rendering: pixelated;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
-    font-size: 16px;
+    z-index: 2;
+  }
+
+  /* The pixel "8" inside the white circle */
+  .ball .white-circle .eight {
+    font-size: 48px;
+    color: #4b3382;
+    font-weight: bold;
+    letter-spacing: 0;
+    line-height: 1;
+    user-select: none;
+    text-shadow:
+      1px 1px 0 #2a2255,
+      -1px -1px 0 #6e60b5;
+  }
+
+  /* Answer text pixel bubble style */
+  .answer-text {
+    position: relative;
+    background: #230046;
+    color: #a99efc;
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 700;
+    font-family: 'Press Start 2P', monospace;
     text-align: center;
-    padding: 10px;
-    box-shadow: 4px 4px 0 #d1a0ff, -4px -4px 0 #d1a0ff;
-    transition: transform 0.1s, box-shadow 0.1s;
-    color: #fff;
+    padding: 6px 12px;
+    border: 3px solid #6a57d1;
+    border-radius: 4px;
+    box-shadow:
+      2px 2px 0 #15002c,
+      inset 0 0 10px #bfaeff;
+    max-width: 85%;
+    user-select: none;
+    z-index: 5;
+    margin-top: 180px; /* push below the ball */
   }
 
   /* Shake animation */
@@ -57,20 +137,8 @@
     100% { transform: translate(1px, -2px) rotate(-1deg); }
   }
 
-  /* Neon pulse effect */
-  @keyframes neonPulse {
-    0%, 100% { box-shadow: 0 0 20px #d1a0ff, 4px 4px 0 #d1a0ff, -4px -4px 0 #d1a0ff; }
-    50% { box-shadow: 0 0 40px #ff66ff, 4px 4px 0 #ff66ff, -4px -4px 0 #ff66ff; }
-  }
-
-  /* Flicker effect */
-  @keyframes flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-    20%, 22%, 24%, 55% { opacity: 0.7; }
-  }
-
   .shake {
-    animation: shake 0.5s, neonPulse 0.5s, flicker 0.5s;
+    animation: shake 0.5s;
   }
 
   input, button {
@@ -84,9 +152,7 @@
     outline: none;
   }
 
-  input::placeholder {
-    color: #b08fff;
-  }
+  input::placeholder { color: #b08fff; }
 
   button:hover {
     cursor: pointer;
@@ -100,22 +166,65 @@
     font-size: 10px;
     color: #b08fff;
   }
+
+  /* Fixed GitHub footer button at bottom center */
+  footer {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px #6a57d1aa;
+    z-index: 1000;
+    width: auto;
+    text-align: center;
+  }
+
+  footer a.github-button {
+    display: inline-block;
+  }
+
+  footer a.github-button:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
+  }
+
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <h1>Pixel Magic 8 Ball</h1>
-<div class="ball" id="magicBall">Ask me anything!</div>
+<div class="ball" id="magicBall">
+  <div class="white-circle">
+    <div class="eight">8</div>
+  </div>
+  <div class="answer-text" id="answerText">Ask me anything!</div>
+</div>
 
-<input type="text" id="question" placeholder="Type your question..." size="30">
+<input type="text" id="question" placeholder="Type your question..." size="30" />
 <button onclick="shakeBall()">Ask</button>
 
 <h3>Add Custom Answer</h3>
-<input type="text" id="newAnswer" placeholder="Type new answer..." size="30">
+<input type="text" id="newAnswer" placeholder="Type new answer..." size="30" />
 <button onclick="addAnswer()">Add Answer</button>
 
 <div class="answers-list" id="answerList"></div>
+
+<footer>
+  <a class="github-button"
+     href="https://github.com/DatnerdAshley/retro-8ball"
+     data-icon="octicon-mark-github"
+     data-size="large"
+     data-show-count="true"
+     aria-label="View DatnerdAshley/retro-8ball">
+     View on GitHub
+  </a>
+</footer>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
 
 <script>
   let answers = [
@@ -146,12 +255,13 @@
     }
 
     const ball = document.getElementById('magicBall');
-    ball.textContent = "Thinking...";
+    const answerText = document.getElementById('answerText');
+    answerText.textContent = "Thinking...";
     ball.classList.add('shake');
 
     setTimeout(() => {
       const randomIndex = Math.floor(Math.random() * answers.length);
-      ball.textContent = answers[randomIndex];
+      answerText.textContent = answers[randomIndex];
       ball.classList.remove('shake');
     }, 500);
   }
