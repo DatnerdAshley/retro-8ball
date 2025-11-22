@@ -7,7 +7,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
   body {
-    background: #0b0040; /* dark navy purple like image bg */
+    background: #0b0040;
     color: #fff;
     font-family: 'Press Start 2P', monospace;
     display: flex;
@@ -18,6 +18,7 @@
     margin: 0;
     padding-bottom: 120px;
     position: relative;
+    transition: background 0.2s;
   }
 
   h1 {
@@ -33,23 +34,21 @@
     position: relative;
     width: 192px;
     height: 192px;
-    background: #1e103a; /* base dark purple */
+    background: #1e103a;
     box-shadow:
       4px 4px 0 #2a1a56,
       8px 8px 0 #3b2b73,
       inset 10px 10px 0 #4c3c91,
       inset -10px -10px 0 #1a0a2e;
-    /* Removed border for no boxy outline */
     image-rendering: pixelated;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
     padding-bottom: 22px;
-    cursor: default;
   }
 
-  /* Pixel shading "pixels" to simulate the shape (using box shadows for pixel effect) */
+  /* White circle & 8 */
   .ball::before {
     content: "";
     position: absolute;
@@ -57,7 +56,7 @@
     left: 15px;
     width: 160px;
     height: 160px;
-    background: #2a2255; /* dark blue circle */
+    background: #2a2255;
     border-radius: 50%;
     box-shadow:
       inset 10px 10px 0 #524b88,
@@ -66,8 +65,7 @@
       8px 8px 0 #362f68;
   }
 
-  /* White circle behind the 8 */
-  .ball .white-circle {
+  .white-circle {
     position: absolute;
     top: 65px;
     left: 50%;
@@ -80,27 +78,20 @@
       1px 1px 0 #7aa3ff,
       -1px -1px 0 #5381d9;
     border-radius: 50%;
-    image-rendering: pixelated;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2;
   }
 
-  /* The pixel "8" inside the white circle */
-  .ball .white-circle .eight {
+  .eight {
     font-size: 48px;
     color: #4b3382;
     font-weight: bold;
-    letter-spacing: 0;
-    line-height: 1;
-    user-select: none;
-    text-shadow:
-      1px 1px 0 #2a2255,
-      -1px -1px 0 #6e60b5;
+    text-shadow: 1px 1px 0 #2a2255, -1px -1px 0 #6e60b5;
   }
 
-  /* Answer text pixel bubble style */
+  /* Answer bubble */
   .answer-text {
     position: relative;
     background: #230046;
@@ -108,38 +99,38 @@
     font-size: 11px;
     line-height: 1.2;
     font-weight: 700;
-    font-family: 'Press Start 2P', monospace;
-    text-align: center;
     padding: 6px 12px;
     border: 3px solid #6a57d1;
     border-radius: 4px;
-    box-shadow:
-      2px 2px 0 #15002c,
-      inset 0 0 10px #bfaeff;
+    box-shadow: 2px 2px 0 #15002c, inset 0 0 10px #bfaeff;
     max-width: 85%;
     user-select: none;
     z-index: 5;
-    margin-top: 180px; /* push below the ball */
+    margin-top: 180px;
+    transition: 0.15s;
   }
 
   /* Shake animation */
   @keyframes shake {
-    0% { transform: translate(2px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(0px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(2px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(2px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    20% { transform: translate(-3px, 2px) rotate(-2deg); }
+    40% { transform: translate(3px, -2px) rotate(2deg); }
+    60% { transform: translate(-2px, 3px) rotate(0deg); }
+    80% { transform: translate(2px, -3px) rotate(-2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
   }
+  .shake { animation: shake 0.5s; }
 
-  .shake {
-    animation: shake 0.5s;
+  /* CHAOS SHAKE (more intense) */
+  @keyframes chaosShake {
+    0% { transform: translate(4px, 4px) rotate(0deg); }
+    20% { transform: translate(-6px, -2px) rotate(4deg); }
+    40% { transform: translate(7px, -3px) rotate(-4deg); }
+    60% { transform: translate(-5px, 6px) rotate(5deg); }
+    80% { transform: translate(6px, -6px) rotate(-6deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
   }
+  .chaosShake { animation: chaosShake 0.9s; }
 
   input, button {
     font-family: 'Press Start 2P', monospace;
@@ -149,15 +140,10 @@
     background: #330033;
     color: #d1a0ff;
     border: 2px solid #d1a0ff;
-    outline: none;
   }
 
+  button:hover { background: #440044; cursor: pointer; }
   input::placeholder { color: #b08fff; }
-
-  button:hover {
-    cursor: pointer;
-    background: #440044;
-  }
 
   .answers-list {
     margin-top: 10px;
@@ -167,7 +153,14 @@
     color: #b08fff;
   }
 
-  /* Fixed GitHub footer button at bottom center */
+  .chaos-bg {
+    animation: chaosBgFlash 0.3s infinite alternate;
+  }
+  @keyframes chaosBgFlash {
+    from { background: #0b0040; }
+    to { background: #3c0070; }
+  }
+
   footer {
     position: fixed;
     bottom: 12px;
@@ -178,29 +171,19 @@
     padding: 10px 15px;
     border-radius: 6px;
     box-shadow: 0 0 10px #6a57d1aa;
-    z-index: 1000;
-    width: auto;
     text-align: center;
   }
-
-  footer a.github-button {
-    display: inline-block;
-  }
-
-  footer a.github-button:hover {
-    transform: scale(1.05);
-    transition: transform 0.2s ease-in-out;
-  }
-
 </style>
 </head>
+
 <body>
 
 <h1>Pixel Magic 8 Ball</h1>
+
+<button id="chaosToggle">Enable Chaos Mode</button>
+
 <div class="ball" id="magicBall">
-  <div class="white-circle">
-    <div class="eight">8</div>
-  </div>
+  <div class="white-circle"><div class="eight">8</div></div>
   <div class="answer-text" id="answerText">Ask me anything!</div>
 </div>
 
@@ -218,8 +201,7 @@
      href="https://github.com/DatnerdAshley/retro-8ball"
      data-icon="octicon-mark-github"
      data-size="large"
-     data-show-count="true"
-     aria-label="View DatnerdAshley/retro-8ball">
+     data-show-count="true">
      View on GitHub
   </a>
 </footer>
@@ -227,7 +209,22 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 
 <script>
-  let answers = [
+  let chaosMode = false;
+
+  const chaosAnswers = [
+    "☠ GLITCH IN REALITY DETECTED ☠",
+    "YES??? no... MAYBE??? **ALL OF THEM.**",
+    "🜏 THE PORTAL OPENS 🜏",
+    "ɐᴉlɐɹʇsn∀ ǝɯos ʇǝƃ",
+    "ERROR 8-BALL.EXE HAS EXPLODED",
+    "🔥🔥 ABSOLUTELY YES 🔥🔥",
+    "NO BUT ALSO YES BUT ALSO WHAT",
+    "✨ MULTIVERSE SAYS: PROBABLY ✨",
+    "You are asking the wrong universe.",
+    "💀 CHAOS RISING 💀"
+  ];
+
+  let normalAnswers = [
     "It is certain",
     "Without a doubt",
     "You may rely on it",
@@ -240,42 +237,74 @@
     "Very doubtful"
   ];
 
+  let answers = [...normalAnswers];
+
   function updateAnswerList() {
-    const listDiv = document.getElementById('answerList');
-    listDiv.innerHTML = "<strong>Current Answers:</strong><br>" + answers.join("<br>");
+    document.getElementById('answerList').innerHTML =
+      "<strong>Current Answers:</strong><br>" + answers.join("<br>");
   }
   updateAnswerList();
 
-  function shakeBall() {
-    const questionInput = document.getElementById('question');
-    const question = questionInput.value.trim();
-    if(!question) {
-      alert("Please ask a question!");
-      return;
+  document.getElementById("chaosToggle").onclick = () => {
+    chaosMode = !chaosMode;
+
+    if (chaosMode) {
+      answers = [...normalAnswers, ...chaosAnswers];
+      document.body.classList.add("chaos-bg");
+      document.getElementById("chaosToggle").textContent = "Disable Chaos Mode";
+    } else {
+      answers = [...normalAnswers];
+      document.body.classList.remove("chaos-bg");
+      document.getElementById("chaosToggle").textContent = "Enable Chaos Mode";
     }
+
+    updateAnswerList();
+  };
+
+  function shakeBall() {
+    const q = document.getElementById("question").value.trim();
+    if (!q) return alert("Please ask a question!");
 
     const ball = document.getElementById('magicBall');
     const answerText = document.getElementById('answerText');
-    answerText.textContent = "Thinking...";
-    ball.classList.add('shake');
+
+    answerText.textContent = chaosMode ? "UNSTABLE..." : "Thinking...";
+    ball.classList.add(chaosMode ? "chaosShake" : "shake");
 
     setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * answers.length);
-      answerText.textContent = answers[randomIndex];
-      ball.classList.remove('shake');
-    }, 500);
+      let answer = answers[Math.floor(Math.random() * answers.length)];
+
+      if (chaosMode) {
+        // Random chaos effects
+        const effects = [
+          () => answer = answer.split("").sort(() => Math.random()-0.5).join(""),
+          () => answer = answer.toUpperCase(),
+          () => answer = answer + " 🤡🤡🤡",
+          () => answer = "🔥 " + answer + " 🔥",
+          () => answer = answer + "<br><br>" + chaosAnswers[Math.floor(Math.random() * chaosAnswers.length)]
+        ];
+        if (Math.random() < 0.6) effects[Math.floor(Math.random()*effects.length)]();
+
+        answerText.style.color = `hsl(${Math.random()*360}, 90%, 70%)`;
+      } else {
+        answerText.style.color = "#a99efc";
+      }
+
+      answerText.innerHTML = answer;
+      ball.classList.remove("shake", "chaosShake");
+    }, chaosMode ? 900 : 500);
   }
 
   function addAnswer() {
-    const newAnswerInput = document.getElementById('newAnswer');
-    const newAnswer = newAnswerInput.value.trim();
-    if(newAnswer && !answers.includes(newAnswer)) {
-      answers.push(newAnswer);
+    const input = document.getElementById('newAnswer');
+    const newA = input.value.trim();
+
+    if (newA && !answers.includes(newA)) {
+      answers.push(newA);
+      if (!normalAnswers.includes(newA)) normalAnswers.push(newA);
       updateAnswerList();
-      newAnswerInput.value = "";
-    } else {
-      alert("Please enter a unique answer!");
-    }
+      input.value = "";
+    } else alert("Please enter a unique answer!");
   }
 </script>
 
